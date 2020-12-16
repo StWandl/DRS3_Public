@@ -1,0 +1,92 @@
+Testszenario 2:
+
+A: Testprogramm
+B: Zu testender Knoten
+
+Start: A ist aktiver Master
+
+1) A ist aktiver Master, B integriert sich mit höherer Priorität -> wird Master
+2) A synchronisiert mit Master (B)
+3) Slave (A) fällt aus
+4) A reintegriert sich mit höherer Priorität, übernimmt Master-Rolle von B
+5) B synchronisiert mit Master (A)
+
+Start:
+- A ist aktiver Master
+- A hat niedrigere Priorität als Testknoten
+
+
+
+### 1) Integration zu aktiven Master, welcher eine niedrigere Priorität hat
+
+A wartet auf Msg-Type1 auf Port 12345 (Broadcast)
+
+			B sendet seine Priorität über Broadcast, Msg-Type1
+
+A sendet ACK (Msg-Type2)
+
+			B erkennt, dass eigene Priorität höher ist als die von A
+			--> B benachrichtigt alle Knoten über Broadcast, dass er jetzt Master ist, Msg-Type3
+
+A antwortet darauf mit Ack, Msg-Type4
+
+-------------------------------------------------------------------------------------
+
+### 2) Synchronisation als Master (3x durchlaufen)
+
+			B schickt Anfrage Msg-Type5 an A
+
+A antwortet mit Zeitstempel, Msg-Type6
+
+			B sendet Abweichung zurück, Msg-Type7
+
+-------------------------------------------------------------------------------------
+
+### 3) Slave Ausfall, A antwortet nicht mehr
+
+A antwortet nicht mehr
+
+			B sendet Timestamp Anfrage (Msg-Type5) 2x und entfernt Slave (A) danach aus Liste
+
+-------------------------------------------------------------------------------------
+
+### 4) A reintegriert sich mit höherer Priorität, übernimmt Master-Rolle von B
+
+A sendet seine Priorität über Broadcast, Msg-Type1
+
+			B sendet ACK (Msg-Type2)
+
+A erkennt, dass eigene Priorität höher ist als die von B
+--> A benachrichtigt alle Knoten über Broadcast, dass er jetzt Master ist, Msg-Type3
+
+			B antwortet darauf mit Ack, Msg-Type4
+
+-------------------------------------------------------------------------------------
+
+### 5) Synchronisation mit Master (3x durchlaufen)
+
+A schickt Anfrage Msg-Type5 an B
+
+			B antwortet mit Zeitstempel, Msg-Type6
+
+A sendet Abweichung zurück, Msg-Type7
+
+-------------------------------------------------------------------------------------
+
+### 6) Master (A) fällt aus, B übernimmt Master Rolle
+
+A wartet max. 3 Sync-Intervalle
+
+			B sendet Priorität über Broadcast aus, Msg-Type1
+
+			B wartet ca. 1 Sekunde
+
+			B sendet über Broadcast aus, dass er jetzt Master ist, Msg-Type3
+
+-------------------------------------------------------------------------------------
+
+### TEST DONE ###
+
+
+
+

@@ -1,0 +1,105 @@
+Testszenario 1:
+
+A: Testprogramm
+B: Zu testender Knoten
+
+Start: A ist aktiver Master
+
+1) A ist aktiver Master, B integriert sich mit kleinerer Priorität
+2) B synchronisiert mit Master (A)
+3) Master (A) Ausfall, A wird wieder Master durch höhere Priorität
+4) B synchronisiert mit Master (A)
+5) Master (A) Ausfall, B wird jetzt Master durch höhere Priorität
+6) A synchronisiert mit Master (B)
+7) Slave (A) fällt aus
+
+Start:
+- A ist aktiver Master
+- A hat höhere Priorität als Testknoten
+
+
+
+### 1) Integration zu aktiven höher prioren Master
+
+A wartet auf Msg-Type1 auf Port 12345 (Broadcast)
+
+			B sendet seine Priorität über Broadcast, Msg-Type1
+
+A registriert (speichert) B als Slave und sendet ACK (Msg-Type2)
+
+-------------------------------------------------------------------------------------
+
+### 2) Synchronisation mit Master (3x durchlaufen)
+
+A schickt Anfrage Msg-Type5 an Slave
+
+			B antwortet mit Zeitstempel, Msg-Type6
+
+A sendet Abweichung zurück, Msg-Type7
+
+-------------------------------------------------------------------------------------
+
+### 3) Ausfall Master, A wird wieder Master
+
+A wartet max. 3 Sync-Intervalle
+
+			B sendet Priorität über Broadcast aus, Msg-Type1
+
+A sendet (höhere) Priorität über Broadcast aus, Msg-Type1
+
+A wartet 1 Sekunde
+
+A sendet über Broadcast aus, dass er jetzt Master ist, Msg-Type3
+
+			B antwortet mit ACK, Msg-Type4
+
+-------------------------------------------------------------------------------------
+
+### 4) Synchronisation mit Master (3x durchlaufen)
+
+A schickt Anfrage Msg-Type5 an Slave
+
+			B antwortet mit Zeitstempel, Msg-Type6
+
+A sendet Abweichung zurück, Msg-Type7
+
+-------------------------------------------------------------------------------------
+
+### 5) Ausfall Master, B wird jetzt Master
+
+A wartet max. 3 Sync-Intervalle
+
+			B sendet Priorität über Broadcast aus, Msg-Type1
+
+A sendet (niedrigere) Priorität über Broadcast aus, Msg-Type1
+
+			B wartet ca. 1 Sekunde
+
+			B sendet über Broadcast aus, dass er jetzt Master ist, Msg-Type3
+
+A antwortet mit ACK, Msg-Type4
+
+-------------------------------------------------------------------------------------
+
+### 6) Synchronisation als Master (3x durchlaufen)
+
+			B schickt Anfrage Msg-Type5 an A
+
+A antwortet mit Zeitstempel, Msg-Type6
+
+			B sendet Abweichung zurück, Msg-Type7
+
+-------------------------------------------------------------------------------------
+
+### 7) Slave Ausfall, A antwortet nicht mehr
+
+A antwortet nicht mehr
+
+			B sendet Timestamp Anfrage (Msg-Type5) 2x und entfernt Slave (A) danach aus Liste
+
+-------------------------------------------------------------------------------------
+
+### TEST DONE ###
+
+
+

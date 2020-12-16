@@ -1,0 +1,19 @@
+Aufruf: ./SyncModuleTest(.exe) [1] [2] [3]
+
+Kommandozeilen-Parameter:
+[1]: Test-Szenario, mögliche Werte: 1, 2
+[2]: Priorität von Testobjekt, mögliche Werte: > 1
+[3]: -local, optional. Gibt an ob Testprogramm und Testobjekt auf der gleichen Maschine laufen
+
+Ist -local gesetzt, dann sendet das Testprogramm Nachrichten auf den Port 12346 und empfängt auf dem Port 12345.
+Ist -local nicht gesetzt, dann sendet und empfängt das Testprogramm alle Nachrichten über Port 12345.
+
+Beispielaufrufe:
+
+./SynchModuleTest.exe 1 100 -local
+./SynchModuleTest.exe 2 100
+./SynchModuleTest.exe 2 50 -local
+...
+
+
+Für genauere Beschreibungen der beiden Testszenarien siehe Source-Code oder Test-Szenario1.txt und Test-Szenario2.txt.
