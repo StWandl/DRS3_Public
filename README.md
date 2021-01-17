@@ -1,3 +1,13 @@
+Ordnerstruktur bzw. Inhalte:
+
+* Rpi_Testsystem: Software zum Zustandsüberwachen der einzelnen Knoten, für Testaufbau
+* SyncAnalyzer:   Matlab-Skript um Logic-Analyzer Daten zu analysieren und darzustellen + Messdaten bzw. Ergebnisse
+* SyncModuleTest: Modultest Software, um den Synchronisationsablauf einzelner Knoten in Software zu testen
+
+----------------------------------------------------------
+
+**Bezüglich SyncModuleTest**
+
 Benötigt boost Bibliothek ( https://www.boost.org/users/download/ ), entwickelt mit boost_1_67_0-msvc-14.1-64
 
 Testablauf:
